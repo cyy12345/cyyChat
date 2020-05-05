@@ -15,6 +15,14 @@ static const string SEVER_IP = "127.0.0.1";
 
 static const int EPOLL_SIZE = 5000;
 
+static const int BUF_SIZE = 65535;
+
+static const char* SERVER_WELCOME = "Welcome you join to the chat room! Your chat ID is: Client #%d"; 
+
+static const char* CAUTION = "There is only one int the char room!";
+
+static const char* SERVER_MESSAGE =  "ClientID %d say >> %s"; 
+
 static void addfd(int epollfd, int fd, bool enable_et){
 	struct epoll_event ev;
 	ev.data.fd = fd;
