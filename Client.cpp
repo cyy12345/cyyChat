@@ -46,6 +46,20 @@ void Client::Connect(){
 
 	addfd(epfd, sock, true);
 	addfd(epfd, pipe_fd[0], true);
+
+	cout << "Please input your username: " << endl;
+	clientInfo ci; 
+	
+	fgets(ci.username, NAME_SIZE, stdin);
+
+	ci.username[strlen(ci.username)-1] = 0;
+
+	int len = send(sock, (void*)&ci,sizeof(clientInfo),0);
+	
+	if(len < 0){
+		perror("login error");
+		exit(-1);
+	}
 }
 
 void Client::Close(){

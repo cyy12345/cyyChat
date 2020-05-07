@@ -10,6 +10,7 @@ Server::Server(){
 	listener = 0;
 
 	epfd = 0;
+	name_ep = 0;
 
 }
 
@@ -36,8 +37,9 @@ void Server::init(){
 	cout << "*** Start to listen: " << SERVER_IP << endl;
 
 	epfd = epoll_create(EPOLL_SIZE);   // first step of epoll, create the handle
+	name_ep = epoll_create(1);
 
-	if(epfd < 0){
+	if(epfd < 0 | name_ep < 0 ){
 		perror("epfd error");
 		exit(-1);
 	}
@@ -60,7 +62,7 @@ int Server::sendBroadcastMessage(int clientfd){
 	cout << "read from client(clientID = " << clientfd << ")" << endl;
 	int len = recv(clientfd, buf, BUF_SIZE,0);
 
-	// if client have already closed the connection
+	// if client closed the connection
 	if(len == 0){
 		close(clientfd);
 
@@ -76,8 +78,8 @@ int Server::sendBroadcastMessage(int clientfd){
 			send(clientfd,CAUTION, strlen(CAUTION), 0);
 			return len;
 		}
-
-		sprintf(message, SERVER_MESSAGE, clientfd, buf);
+		
+		sprintf(message, SERVER_MESSAGE, client_map[clientfd].c_str(), buf);
 
 		list<int>::iterator it;
 		for(it = clients_list.begin(); it != clients_list.end();++it){
@@ -94,7 +96,7 @@ int Server::sendBroadcastMessage(int clientfd){
 void Server::start(){
 
 	static struct epoll_event events[EPOLL_SIZE];
-
+	static struct epoll_event login_event[1];
 	init();
 
 	while(1){
@@ -120,16 +122,32 @@ void Server::start(){
 					 << clientfd << endl;
 				
 				addfd(epfd, clientfd, true);
+				addfd(name_ep, clientfd, true);
 
 				clients_list.push_back(clientfd);
 				cout << "Add new clientfd = " << clientfd << " to epoll" << endl;
-				cout << "Now there are " << clients_list.size() << "clients in the chat room" << endl;
+				cout << "Now there are " << clients_list.size() << " clients in the chat room" << endl;
 
+
+				epoll_wait(name_ep, login_event, 1, -1);
+				struct clientInfo ci;
+				if(login_event[0].data.fd == clientfd){
+					cout << "read client info from client(clientID = " << clientfd << ")" << endl;
+					int len = recv(clientfd, (void*)&ci, sizeof(ci),0);
+					if(len <= 0){
+						perror("login error");
+						Close();
+						exit(-1);
+					}
+				}
+				
 				cout << "welcome message" << endl;
 				char message[BUF_SIZE];
 
 				memset(message,0,BUF_SIZE);
-				sprintf(message,SERVER_WELCOME, clientfd);
+				sprintf(message,SERVER_WELCOME, ci.username);
+				client_map[clientfd] = string(ci.username);
+
 				int ret = send(clientfd, message, BUF_SIZE, 0);
 				if(ret < 0){
 					perror("send error");
