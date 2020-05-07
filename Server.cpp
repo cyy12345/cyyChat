@@ -46,7 +46,7 @@ void Server::init(){
 
 }
 
-void Server::close(){
+void Server::Close(){
 	close(listener);
 	close(epfd);
 }
@@ -54,7 +54,7 @@ void Server::close(){
 int Server::sendBroadcastMessage(int clientfd){
 	char buf[BUF_SIZE], message[BUF_SIZE];
 	memset(buf,0,BUF_SIZE);
-	memset(message, BUF_SIZE);
+	memset(message, 0, BUF_SIZE);
 
 	//receive new message
 	cout << "read from client(clientID = " << clientfd << ")" << endl;
@@ -133,7 +133,7 @@ void Server::start(){
 				int ret = send(clientfd, message, BUF_SIZE, 0);
 				if(ret < 0){
 					perror("send error");
-					close();
+					Close();
 					exit(-1);
 				}
 			// existing client send message
@@ -141,7 +141,7 @@ void Server::start(){
 				int ret = sendBroadcastMessage(sockfd);
 				if(ret < 0){
 					perror("error");
-					close();
+					Close();
 					exit(-1);
 				}
 			}
@@ -149,7 +149,7 @@ void Server::start(){
 
 
 	}
-	close();
+	Close();
 }
 
 

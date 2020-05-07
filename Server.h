@@ -2,6 +2,7 @@
 #define SERVER_H
 
 #include "Common.h"
+using namespace std;
 
 class Server{
 
@@ -12,7 +13,7 @@ public:
 	void init();
 
 	//close server
-	void close();
+	void Close();
 
 	//start running server
 	void start();
@@ -21,7 +22,7 @@ private:
 	int sendBroadcastMessage(int clientfd);
 
 	// server address info
-	struct sockaddr_in severAddr;
+	struct sockaddr_in serverAddr;
 
 	// socket listening
 	int listener;
