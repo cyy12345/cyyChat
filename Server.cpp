@@ -83,11 +83,11 @@ int Server::sendBroadcastMessage(int clientfd){
 
 		list<int>::iterator it;
 		for(it = clients_list.begin(); it != clients_list.end();++it){
-			if(*it != clientfd){
+			//if(*it != clientfd){
 				if(send(*it,message, BUF_SIZE,0) < 0){
 					return -1;
 				}
-			}
+			//}
 		}
 	}
 	return len;
