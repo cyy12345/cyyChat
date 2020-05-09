@@ -62,6 +62,7 @@ int Server::sendBroadcastMessage(int clientfd){
 	cout << "read from client(clientID = " << clientfd << ")" << endl;
 	int len = recv(clientfd, buf, BUF_SIZE,0);
 	cout << buf << endl;
+	cout << "the length of the received message: "<< len << endl;
 
 	// if client closed the connection
 	if(len == 0){
@@ -71,12 +72,12 @@ int Server::sendBroadcastMessage(int clientfd){
         cout << "ClientID = " << clientfd
              << " closed.\n now there are "
              << clients_list.size()
-             << " client in the char room"
+             << " client in the chat room"
              << endl;
 
 	}else{
 		if(clients_list.size() == 1){
-			send(clientfd,CAUTION, sizeof(CAUTION), 0);
+			send(clientfd,CAUTION, strlen(CAUTION), 0);
 			return len;
 		}
 		
