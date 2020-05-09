@@ -117,6 +117,14 @@ void Server::start(){
 				struct sockaddr_in client_address;
 				socklen_t client_addrLength = sizeof(struct sockaddr_in);
 				int clientfd = accept(listener, (struct sockaddr*)&client_address, &client_addrLength);
+				
+				struct clientInfo ci;
+				int len = recv(clientfd, (void*)&ci, sizeof(ci),0);
+				if(len <= 0){
+					perror("login error");
+					Close();
+					exit(-1);
+				}
 
 				cout << "client connection from: "
 					 << inet_ntoa(client_address.sin_addr) << ":"
@@ -143,13 +151,6 @@ void Server::start(){
 					}
 				}
 				*/	
-				struct clientInfo ci;
-				int len = recv(clientfd, (void*)&ci, sizeof(ci),0);
-				if(len <= 0){
-					perror("login error");
-					Close();
-					exit(-1);
-				}
 				cout << "welcome message" << endl;
 				char message[BUF_SIZE];
 
