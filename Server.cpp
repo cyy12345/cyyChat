@@ -61,6 +61,7 @@ int Server::sendBroadcastMessage(int clientfd){
 	//receive new message
 	cout << "read from client(clientID = " << clientfd << ")" << endl;
 	int len = recv(clientfd, buf, BUF_SIZE,0);
+	cout << buf << endl;
 
 	// if client closed the connection
 	if(len == 0){
@@ -75,7 +76,7 @@ int Server::sendBroadcastMessage(int clientfd){
 
 	}else{
 		if(clients_list.size() == 1){
-			send(clientfd,CAUTION, strlen(CAUTION), 0);
+			send(clientfd,CAUTION, sizeof(CAUTION), 0);
 			return len;
 		}
 		
