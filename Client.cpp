@@ -3,7 +3,7 @@
 using namespace std;
 
 Client::Client(){
-	serverAddr.sin_family = PF_INET;
+	serverAddr.sin_family = AF_INET;
 	serverAddr.sin_port = htons(SERVER_PORT);
 	serverAddr.sin_addr.s_addr = inet_addr(SERVER_IP);
 
@@ -17,8 +17,8 @@ Client::Client(){
 
 }
 
-void Client::Connect(){
-	cout << "Connect Server: " << SERVER_IP << " : " << SERVER_PORT << endl;
+void Client::Connect(clientInfo& ci, std::string& server_ip, int server_port){
+	cout << "Connect Server: " << server_ip << " : " << server_port << endl;
 
 	sock = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -29,6 +29,12 @@ void Client::Connect(){
 
 	if(connect(sock, (struct sockaddr *)&serverAddr, sizeof(serverAddr)) < 0){
 		perror("connect error");
+		exit(-1);
+	}
+	int len = send(sock, (void*)&ci,sizeof(clientInfo),0);
+	
+	if(len < 0){
+		perror("login error");
 		exit(-1);
 	}
 
@@ -47,19 +53,6 @@ void Client::Connect(){
 	addfd(epfd, sock, true);
 	addfd(epfd, pipe_fd[0], true);
 
-	cout << "Please input your username: " << endl;
-	clientInfo ci; 
-	
-	fgets(ci.username, NAME_SIZE, stdin);
-
-	ci.username[strlen(ci.username)-1] = 0;
-
-	int len = send(sock, (void*)&ci,sizeof(clientInfo),0);
-	
-	if(len < 0){
-		perror("login error");
-		exit(-1);
-	}
 }
 
 void Client::Close(){
@@ -73,8 +66,28 @@ void Client::Close(){
 
 void Client::start(){
 	static struct epoll_event events[2];
+	
+	cout << "Please input server ip address: " << endl;
 
-	Connect();
+	string server_ip;
+	cin >> server_ip;
+	cout << "Please input server port: " << endl;
+	
+	int server_port;
+	cin >> server_port;
+	serverAddr.sin_port = htons(server_port);
+	serverAddr.sin_addr.s_addr = inet_addr(server_ip.c_str());
+
+	cout << "Please input your username: " << endl;
+	clientInfo ci; 
+	string username;
+	//getline(cin,username);
+	cin >> username;
+	strcpy(ci.username,username.c_str());
+
+	//ci.username[strlen(ci.username)-1] = 0;
+
+	Connect(ci,server_ip,server_port);
 
 	pid = fork();
 

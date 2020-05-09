@@ -6,7 +6,7 @@
 class Client{
 public:
 	Client();
-	void Connect();
+	void Connect(clientInfo& ci, std::string& server_ip, int server_port);
 	void Close();
 	void start();
 

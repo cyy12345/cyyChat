@@ -10,7 +10,7 @@ Server::Server(){
 	listener = 0;
 
 	epfd = 0;
-	name_ep = 0;
+//	name_ep = 0;
 
 }
 
@@ -37,9 +37,9 @@ void Server::init(){
 	cout << "*** Start to listen: " << SERVER_IP << endl;
 
 	epfd = epoll_create(EPOLL_SIZE);   // first step of epoll, create the handle
-	name_ep = epoll_create(1);
+//	name_ep = epoll_create(1);
 
-	if(epfd < 0 | name_ep < 0 ){
+	if(epfd < 0){
 		perror("epfd error");
 		exit(-1);
 	}
@@ -96,7 +96,7 @@ int Server::sendBroadcastMessage(int clientfd){
 void Server::start(){
 
 	static struct epoll_event events[EPOLL_SIZE];
-	static struct epoll_event login_event[1];
+//	static struct epoll_event login_event[1];
 	init();
 
 	while(1){
@@ -106,6 +106,8 @@ void Server::start(){
 			perror("epoll wait failure.");
 			break;
 		}
+
+		cout << "**** epoll events number: " << epoll_events_count << endl;
 
 		for(int i = 0; i < epoll_events_count; ++i){
 			int sockfd = events[i].data.fd;
@@ -122,13 +124,13 @@ void Server::start(){
 					 << clientfd << endl;
 				
 				addfd(epfd, clientfd, true);
-				addfd(name_ep, clientfd, true);
+				//addfd(name_ep, clientfd, true);
 
 				clients_list.push_back(clientfd);
 				cout << "Add new clientfd = " << clientfd << " to epoll" << endl;
 				cout << "Now there are " << clients_list.size() << " clients in the chat room" << endl;
 
-
+				/*
 				epoll_wait(name_ep, login_event, 1, -1);
 				struct clientInfo ci;
 				if(login_event[0].data.fd == clientfd){
@@ -140,7 +142,14 @@ void Server::start(){
 						exit(-1);
 					}
 				}
-				
+				*/	
+				struct clientInfo ci;
+				int len = recv(clientfd, (void*)&ci, sizeof(ci),0);
+				if(len <= 0){
+					perror("login error");
+					Close();
+					exit(-1);
+				}
 				cout << "welcome message" << endl;
 				char message[BUF_SIZE];
 
@@ -158,7 +167,7 @@ void Server::start(){
 			}else{
 				int ret = sendBroadcastMessage(sockfd);
 				if(ret < 0){
-					perror("error");
+					perror("broadcast error");
 					Close();
 					exit(-1);
 				}

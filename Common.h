@@ -17,7 +17,7 @@
 
 static const unsigned int SERVER_PORT = 8888;
 
-static const char *SERVER_IP = "127.0.0.1";
+static const char *SERVER_IP = "0.0.0.0";
 
 static const int EPOLL_SIZE = 5000;
 

@@ -29,7 +29,7 @@ private:
 
 	int epfd;
 
-	int name_ep;
+	//int name_ep;
 
 	//list of clients
 	list<int> clients_list;
