@@ -42,12 +42,12 @@ static void addfd(int epollfd, int fd, bool enable_et){
 	struct epoll_event ev;
 	ev.data.fd = fd;
 	ev.events = EPOLLIN;
-//	if(enable_et){
-//		ev.events = EPOLLIN | EPOLLET;  //enable edge trigger
-//	}
+	if(enable_et){
+		ev.events = EPOLLIN | EPOLLET;  //enable edge trigger
+	}
 	epoll_ctl(epollfd, EPOLL_CTL_ADD, fd, &ev);
 
-	//fcntl(fd, F_SETFL, fcntl(fd, F_GETFD, 0)| O_NONBLOCK);
+	fcntl(fd, F_SETFL, fcntl(fd, F_GETFD, 0)| O_NONBLOCK);
 	std::cout << "fd added to epoll!" << std::endl;
 	std::cout << std::endl;
 }
