@@ -47,7 +47,7 @@ static void addfd(int epollfd, int fd, bool enable_et){
 //	}
 	epoll_ctl(epollfd, EPOLL_CTL_ADD, fd, &ev);
 
-	fcntl(fd, F_SETFL, fcntl(fd, F_GETFD, 0)| O_NONBLOCK);
+	//fcntl(fd, F_SETFL, fcntl(fd, F_GETFD, 0)| O_NONBLOCK);
 	std::cout << "fd added to epoll!" << std::endl;
 	std::cout << std::endl;
 }
