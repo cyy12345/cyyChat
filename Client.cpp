@@ -131,9 +131,9 @@ void Client::start(){
 					int ret = recv(sock, message, BUF_SIZE, 0);
 					//cout << "message length: "<<strlen(message) << endl;
 					//cout << "ret : " << ret << endl;
-					if(strlen(message) == 0){
-						continue;
-					}
+					//if(ret!=0 && strlen(message) == 0){
+					//	continue;
+					//}
 					if(ret == 0){
 						cout << "Server closed connection: " << sock << endl;
 						close(sock);
