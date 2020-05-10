@@ -1,3 +1,4 @@
 chatroom_server
 chatroom_client
 *.swp
+*.o

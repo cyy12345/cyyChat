@@ -112,7 +112,7 @@ void Server::start(){
 			break;
 		}
 
-		cout << "**** epoll events number: " << epoll_events_count << endl;
+		//cout << "**** epoll events number: " << epoll_events_count << endl;
 
 		for(int i = 0; i < epoll_events_count; ++i){
 			int sockfd = events[i].data.fd;

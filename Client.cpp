@@ -129,6 +129,8 @@ void Client::start(){
 
 				if(events[i].data.fd == sock){
 					int ret = recv(sock, message, BUF_SIZE, 0);
+					cout << "message length: "<<strlen(message) << endl;
+					cout << "ret : " << ret << endl;
 					if(strlen(message) == 0){
 						continue;
 					}
