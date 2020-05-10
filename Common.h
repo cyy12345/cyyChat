@@ -21,7 +21,7 @@ static const char *SERVER_IP = "0.0.0.0";
 
 static const int EPOLL_SIZE = 5000;
 
-static const int BUF_SIZE = 65535;
+static const int BUF_SIZE = 8192;
 
 static const int NAME_SIZE = 20;
 
