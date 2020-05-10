@@ -62,6 +62,9 @@ int Server::sendBroadcastMessage(int clientfd){
 	cout << "read from client(clientID = " << clientfd << ")" << endl;
 	int len = recv(clientfd, buf, BUF_SIZE,0);
 	cout << buf << endl;
+	if(strlen(buf) == 0){
+		return len;
+	}
 	cout << "the length of the received message: "<< len << endl;
 
 	// if client closed the connection

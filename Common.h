@@ -25,7 +25,7 @@ static const int BUF_SIZE = 65535;
 
 static const int NAME_SIZE = 20;
 
-static const char* SERVER_WELCOME = "Welcome you join to the chat room! Your chat username is: %s"; 
+static const char* SERVER_WELCOME = "Welcome to join the chat room! Your chat username is: %s"; 
 
 static const char* CAUTION = "There is only one user in the chat room!";
 
