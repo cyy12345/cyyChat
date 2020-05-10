@@ -59,13 +59,13 @@ int Server::sendBroadcastMessage(int clientfd){
 	memset(message, 0, BUF_SIZE);
 
 	//receive new message
-	cout << "read from client(clientID = " << clientfd << ")" << endl;
 	int len = recv(clientfd, buf, BUF_SIZE,0);
-	cout << buf << endl;
+	//cout << buf << endl;
 	if(strlen(buf) == 0){
 		return len;
 	}
-	cout << "the length of the received message: "<< len << endl;
+	cout << "read from client(clientID = " << clientfd << ")" << endl;
+	//cout << "the length of the received message: "<< len << endl;
 
 	// if client closed the connection
 	if(len == 0){

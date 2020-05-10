@@ -129,7 +129,9 @@ void Client::start(){
 
 				if(events[i].data.fd == sock){
 					int ret = recv(sock, message, BUF_SIZE, 0);
-
+					if(strlen(message) == 0){
+						continue;
+					}
 					if(ret == 0){
 						cout << "Server closed connection: " << sock << endl;
 						close(sock);
