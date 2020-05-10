@@ -146,7 +146,7 @@ void Client::start(){
 					if(ret == 0){
 						isClientwork = 0;
 					}else{
-						send(sock, message, BUF_SIZE, 0);
+						send(sock, message, strlen(message), 0);
 					}
 				}
 			}
