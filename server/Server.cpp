@@ -127,7 +127,7 @@ void Server::start(){
 				
 				struct clientInfo ci;
 				int len = recv(clientfd, (void*)&ci, sizeof(ci),0);
-				if(len <= 0){
+				if(len == 0 | len == -1){
 					perror("login error");
 					Close();
 					exit(-1);
