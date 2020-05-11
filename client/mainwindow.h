@@ -2,8 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QDebug>
+#include "Common.h"
 #include <QTableWidgetItem>
-#include "Client.h"
+#include "recvmsgthread.h"
 
 namespace Ui {
 class MainWindow;
@@ -14,17 +16,20 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(int sockfd, QWidget *parent = nullptr);
     void closeEvent(QCloseEvent *event);
     ~MainWindow();
 
 private:
     Ui::MainWindow *ui;
-    std::shared_ptr<Client> client;
+    int sockfd;
+    recvMsgThread* thread;
+
 private slots:
-    void getItem(QTableWidgetItem* item);
+    //void getItem(QTableWidgetItem* item);
 
     void btn_send_slot();
+    void recv_msg(char* msg);
 
 };
 

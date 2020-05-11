@@ -90,11 +90,11 @@ int Server::sendBroadcastMessage(int clientfd){
 
 		list<int>::iterator it;
 		for(it = clients_list.begin(); it != clients_list.end();++it){
-			//if(*it != clientfd){
+			if(*it != clientfd){
 				if(send(*it,message, strlen(message),0) < 0){
 					return -1;
 				}
-			//}
+			}
 		}
 	}
 	return len;
@@ -162,7 +162,6 @@ void Server::start(){
 				char message[BUF_SIZE];
 
 				memset(message,0,BUF_SIZE);
-				sprintf(message,SERVER_WELCOME, ci.username);
 				client_map[clientfd] = string(ci.username);
 
 				int ret = send(clientfd, message, strlen(message), 0);
