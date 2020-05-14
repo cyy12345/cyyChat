@@ -19,11 +19,19 @@ MainWindow::MainWindow(int sockfd, QWidget *parent) :
 
     ui->tableWidget_message->setColumnCount(1);
     ui->tableWidget_message->setShowGrid(false);
-    ui->tableWidget_message->setColumnWidth(0,800);
+    ui->tableWidget_message->setColumnWidth(0,750);
     ui->tableWidget_message->setRowHeight(0,500);
     ui->tableWidget_message->verticalHeader()->setVisible(false);
     ui->tableWidget_message->horizontalHeader()->setVisible(false);
     ui->tableWidget_message->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+
+    ui->btn_send->setStyleSheet("QPushButton{color:white;background:green}");
+
+    this->setStyleSheet("{border:2px groove gray;border-radius:10px;padding:2px 4px}");
+
+    this->setStyleSheet("{background-image:url(:image/ourback.jpg)}");
+
 
     thread = new recvMsgThread(sockfd);
     thread->start();
